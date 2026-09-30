@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
+    <title>Талқылау сұрақтарын генерациялау</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; max-width: 600px; }
+        input, button { width: 100%; padding: 10px; margin-top: 10px; }
+        #output { margin-top: 20px; white-space: pre-wrap; background: #f4f4f4; padding: 15px; }
+    </style>
+</head>
+<body>
+    <h2>Талқылау сұрақтарының генераторы</h2>
+    <input type="text" id="topic" placeholder="Сабақ тақырыбы (мысалы: Абай жолы)">
+    <input type="text" id="grade" placeholder="Сынып (мысалы: 9-сынып)">
+    <button onclick="generate()">Сұрақтарды жасау</button>
+    <div id="output"></div>
+
+    <script>
+        async function generate() {
+            const topic = document.getElementById('topic').value;
+            const grade = document.getElementById('grade').value;
+            const output = document.getElementById('output');
+            output.innerText = "ЖИ ойлануда...";
+
+            const res = await fetch('/generate-questions', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ topic, grade })
+            });
+            const data = await res.json();
+            output.innerText = data.result || data.error;
+        }
+    </script>
+</body>
+</html>
